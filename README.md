@@ -1,6 +1,6 @@
 #### Install
 
-Simply clone and add a file called 'auth.json' under the data folder, containing the following:
+Simply clone and add your discord secret key in `auth.json` under the data folder:
 
 ```json
 {
