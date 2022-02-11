@@ -1,5 +1,5 @@
 # Kleio Discord Bot
-# Copyright (C) 2019-2022 Pim Nelissen
+# Copyright (C) 2019-2023 Pim Nelissen
 # Licensed under the MIT license.
 
 # Importing all neccessary libs.
