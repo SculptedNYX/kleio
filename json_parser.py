@@ -1,4 +1,4 @@
-import json, codecs
+import json, codecs, os
 
 async def select_text(lang, path):
 
@@ -12,7 +12,7 @@ async def select_text(lang, path):
 
 def auth(token):
 
-    with open('data/auth.json', 'r') as f:
+    with open(os.path.join(os.path.abspath('data'),"auth.json"), 'r') as f:
         data = f.read()
 
     tokens = json.loads(data)

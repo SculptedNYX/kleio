@@ -18,7 +18,7 @@ intents.members = True
 client = commands.Bot(command_prefix = '!k', intents=intents)
 
 # Loading all Python scripts inside cogs folder as cog extensions.
-for filename in os.listdir('./cogs'):
+for filename in os.listdir(os.path.abspath('cogs')):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
     print(f"{filename} loaded successfully.")
