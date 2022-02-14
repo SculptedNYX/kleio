@@ -15,7 +15,8 @@ import json_parser
 intents = discord.Intents.default()
 intents.members = True
 
-client = commands.Bot(command_prefix = '!k', intents=intents)
+prefix = '!k '
+client = commands.Bot(command_prefix = prefix, intents=intents)
 
 # Loading all Python scripts inside cogs folder as cog extensions.
 for filename in os.listdir(os.path.abspath('cogs')):
@@ -56,12 +57,13 @@ async def on_member_update(old_member, new_member):
         await gen_chat.send(f"{new_member.mention} {welcome_squad_role.mention}", embed=embed)
 
 @client.event
-async def on_command_error(ctx, error):
+async def on_command_error(ctx, err):
+    # Gets the Embeds cog
+    Embeds = client.get_cog('Embeds')
 
     if isinstance(err, commands.CommandNotFound):
-
         message = str(ctx.message.content)
-        await embeds.Error(ctx, 10, "That command doesn't exist! Please use `.help` to see all available commands!")
+        await Embeds.error(ctx, 10, f"That command doesn't exist! Please use `{prefix}help` to see all available commands!")
 
     elif isinstance(err, commands.CommandOnCooldown):
         if err.retry_after >= 1800:
@@ -70,16 +72,16 @@ async def on_command_error(ctx, error):
             time_left = f"`{round(err.retry_after/60, 2)}` minutes"
         else:
             time_left = f"`{round(err.retry_after, 2)}` seconds"
-        await embeds.Error(ctx, 10, f"Please wait {time_left} before trying again!")
+        await Embeds.error(ctx, 10, f"Please wait {time_left} before trying again!")
 
     elif isinstance(err, commands.MissingPermissions) or isinstance(err, commands.CheckFailure):
-        await embeds.Error(ctx, 20, f"You do not have the `{err.checks[0]}` permissions to use this command!")
+        await Embeds.error(ctx, 20, f"You do not have the `{err.checks[0]}` permissions to use this command!")
 
     elif isinstance(err, commands.MissingRequiredArgument):
-        await embeds.Error(ctx, 20, f"Missing required arguments: `{err.param}`")
+        await Embeds.error(ctx, 20, f"Missing required arguments: `{err.param}`")
 
     else:
-        await embeds.Error(ctx, 20, f"`{ctx.command}` did not work as expected! The error was logged and a developer will take a look at it. Please try again later!")
+        await Embeds.error(ctx, 20, f"`{ctx.command}` did not work as expected! The error was logged and a developer will take a look at it. Please try again later!")
         print(f'[{datetime.datetime.now()}] Unexpected command error: {err}')
 
 # COMMANDS
@@ -176,7 +178,7 @@ async def periodic_check():
                 last_bot_message = m
                 bump_ready = False
                 break
-
+            
     if bump_ready and not has_pinged:
         embed = discord.Embed(title=None, description="🔼 It's time to bump!",colour=0x685985)
         await channel.send(role.mention,embed=embed)
